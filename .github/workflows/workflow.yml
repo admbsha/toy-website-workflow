@@ -40,16 +40,7 @@ jobs:
         template: ./deploy/main.bicep
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
-  
-    whatif:
-    steps:
-    - uses: actions/checkout@v3
-    - uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - uses: azure/arm-deploy@v1
+          - uses: azure/arm-deploy@v1
       uses: Azure/deployment-what-if-action@v1.0.0
       with:
         subscription: ${{ secrets.SUBSCRIPTION_ID }}
