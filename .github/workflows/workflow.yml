@@ -42,7 +42,7 @@ jobs:
         deploymentMode: Validate
   deploy:
       runs-on: ubuntu-latest
-      needs: [whatif]
+      needs: [lint, validate]
       steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
