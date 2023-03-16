@@ -41,24 +41,23 @@ jobs:
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
   whatif:
-  runs-on: ubuntu-latest
-  needs: [lint, validate]
-      steps:
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
-        name: Sign in to Azure
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    runs-on: ubuntu-latest
+    needs: [lint, validate]
+        steps:
+        - uses: actions/checkout@v3
+        - uses: azure/login@v1
+          name: Sign in to Azure
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Preview changes
-        uses: Azure/deployment-what-if-action@v1.0.0
-        with:
-          subscription: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-          templateFile: main.bicep # main.bicep
-
+        - name: Preview changes
+          uses: Azure/deployment-what-if-action@v1.0.0
+          with:
+            subscription: ${{ secrets.SUBSCRIPTION_ID }}
+            resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+            templateFile: main.bicep # main.bicep
   deploy:
       runs-on: ubuntu-latest
       needs: [whatif]
