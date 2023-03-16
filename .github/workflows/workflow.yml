@@ -43,9 +43,9 @@ jobs:
 
   whatif:
     runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v3
-        - uses: azure/login@v1
+      steps:
+      - uses: actions/checkout@v3
+      - uses: azure/login@v1
           name: Sign in to Azure
           with:
              client-id: ${{ secrets.AZURE_CLIENT_ID }}
