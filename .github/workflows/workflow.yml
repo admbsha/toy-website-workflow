@@ -41,18 +41,19 @@ jobs:
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
   whatif:
-    steps:
-    - name: Azure Login
-      uses: Azure/login@v1.1
-      with:
-        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+      runs-on: ubuntu-latest
+      steps:
+      - name: Azure Login
+        uses: Azure/login@v1.1
+        with:
+          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
-    - name: Preview changes
-      uses: Azure/deployment-what-if-action@v1.0.0
-      with:
-        subscription: ${{ secrets.SUBSCRIPTION_ID }}
-        resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-        templateFile: main.bicep # main.bicep
+      - name: Preview changes
+        uses: Azure/deployment-what-if-action@v1.0.0
+        with:
+          subscription: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+          templateFile: main.bicep # main.bicep
 
   deploy:
       runs-on: ubuntu-latest
