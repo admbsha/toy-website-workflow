@@ -13,6 +13,8 @@ permissions:
 env:
     AZURE_RESOURCEGROUP_NAME: ToyWebsite
     ENVIRONMENT_TYPE: nonprod
+    TEMPLATE_NAME: main.bicep
+    GIT_ENVIRONMENT: prod
 
 jobs:
   lint:
@@ -20,9 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run Bicep linter
-      run: az bicep build --file deploy/main.bicep
-    # Authentication
-    # Set up the following secrets in your repository
+      run: az bicep build --file deploy/${{ env.TEMPLATE_NAME }}
   validate:
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +38,7 @@ jobs:
       with:
         deploymentName: ${{ github.run_number }}
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-        template: ./deploy/main.bicep
+        template: ./deploy/${{ env.TEMPLATE_NAME }}
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
 
@@ -58,15 +58,15 @@ jobs:
       with:
         failOnStdErr: false
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-        template: deploy/main.bicep
+        template: deploy/${{ env.TEMPLATE_NAME }}
         #parameters: $GITHUB_WORKSPACE/azuredeploy.parameters.json # Set this to the location of your parameters file
         parameters: >
           environmentType=${{ env.ENVIRONMENT_TYPE }}
         additionalArguments: --what-if
- # Deployment of template 
+# Deployment of template after required reviewers accepted
   deploy:
       runs-on: ubuntu-latest
-      environment: prod
+      environment: ${{ env.GIT_ENVIRONMENT }} # Created rule for review before deploy 
       needs: [preview]
       steps:
       - uses: actions/checkout@v3
@@ -82,6 +82,6 @@ jobs:
           failOnStdErr: false
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-          template: ./deploy/main.bicep
+          template: ./deploy/${{ env.TEMPLATE_NAME }}
           parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
           #parameters: $GITHUB_WORKSPACE/azuredeploy.parameters.json # Set this to the location of your parameters file
