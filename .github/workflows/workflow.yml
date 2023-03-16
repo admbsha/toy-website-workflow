@@ -40,7 +40,7 @@ jobs:
         template: ./deploy/main.bicep
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
-  whatif:
+whatif:
     runs-on: ubuntu-latest
     needs: [lint, validate]
         steps:
@@ -58,7 +58,7 @@ jobs:
             subscription: ${{ secrets.SUBSCRIPTION_ID }}
             resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
             templateFile: main.bicep # main.bicep
-  deploy:
+deploy:
       runs-on: ubuntu-latest
       needs: [whatif]
       steps:
