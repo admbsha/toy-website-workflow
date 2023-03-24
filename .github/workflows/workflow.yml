@@ -1,9 +1,9 @@
-name: deploy-toy-website
-concurrency: toy-company
+name: github-actions
+concurrency: github-actions
 
-on:
+on: 
   push:
-    branches:
+    branches: 
       - main
 
 permissions:
@@ -11,13 +11,13 @@ permissions:
   contents: read
 
 env:
-    AZURE_RESOURCEGROUP_NAME: ToyWebsite
-    ENVIRONMENT_TYPE: nonprod
-    TEMPLATE_NAME: main.bicep
-    GIT_ENVIRONMENT: prod
+    AZURE_RESOURCEGROUP_NAME: rg-bensha01
+    ENVIRONMENT_TYPE: test
+    TEMPLATE_NAME: ./src/main.bicep
+    GIT_ENVIRONMENT: test #Environment type for gibhub / Review and approve rules
 
 jobs:
-  lint:
+  linter:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -30,9 +30,9 @@ jobs:
     - uses: azure/login@v1
       name: Sign in to Azure
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID}}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID}}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
     - uses: azure/arm-deploy@v1
       name: Run preflight validation
       with:
@@ -44,15 +44,15 @@ jobs:
 
   preview:
     runs-on: ubuntu-latest
-    needs: [lint, validate]
+    needs: [linter, validate]
     steps:
     - uses: actions/checkout@v3
     - uses: azure/login@v1
       name: Sign in to Azure
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID}}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID}}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
     - uses: azure/arm-deploy@v1
       name: Run what-if
       with:
@@ -63,19 +63,20 @@ jobs:
         parameters: >
           environmentType=${{ env.ENVIRONMENT_TYPE }}
         additionalArguments: --what-if
-# Deployment of template after required reviewers accepted
+  
+  # Deployment of template after required reviewers accepted
   deploy:
       runs-on: ubuntu-latest
-      environment: prod # Created rule for review before deploy 
+      environment: test # Created rule for review before deploy 
       needs: [preview]
       steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         name: Sign in to Azure
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID}}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID}}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
       - uses: azure/arm-deploy@v1
         name: Deploy website
         with:
