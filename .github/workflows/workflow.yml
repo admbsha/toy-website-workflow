@@ -11,9 +11,9 @@ permissions:
   contents: read
 
 env:
-    AZURE_RESOURCEGROUP_NAME: rg-bensha01
+    AZURE_RESOURCEGROUP_NAME: rg-bensha-01
     ENVIRONMENT_TYPE: test
-    TEMPLATE_NAME: main.bicep
+    TEMPLATE_NAME:  main.bicep
     GIT_ENVIRONMENT: test #Environment type for gibhub / Review and approve rules
 
 jobs:
