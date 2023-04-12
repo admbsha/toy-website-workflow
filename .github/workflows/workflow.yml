@@ -51,7 +51,7 @@ jobs:
         with:
           connection_string: ${{ secrets.AZURE_BLOB_ID }}
           container_name: gitrepo
-          source_folder: .\src
+          source_folder: deploy
           destination_folder: gitreptest
           clean_destination_folder: false
           is_recursive: false
