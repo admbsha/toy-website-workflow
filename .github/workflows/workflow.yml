@@ -51,8 +51,8 @@ jobs:
         with:
           connection_string: ${{ secrets.AZURE_BLOB_ID }}
           container_name: gitrepo
-          source_folder: ../TOY-WEBSITE-WORKFLOW
-          destination_folder: GithubRepoBackup/${{ github.run_number }}
+          source_folder: deploy
+          destination_folder: GithubRepoBackup/Deploy_Run-${{ github.run_number }}
           clean_destination_folder: false
 
   preview:
