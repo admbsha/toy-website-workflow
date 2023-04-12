@@ -6,6 +6,7 @@ on:
     branches: 
       - main
 
+
 permissions:
   id-token: write
   contents: read
@@ -46,14 +47,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: bacongobbler/azure-blob-storage-upload@main
+      - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
         with:
-          source_dir: deploy
-          container_name: gitrepo
           connection_string: ${{ secrets.AZURE_BLOB_ID }}
-          extra_args: '--pattern *.tar.gz'
-          # WARNING: this will overwrite existing blobs in your blob storage
-          overwrite: 'true' 
+          container_name: your-container-name
+          source_folder: .\src
+          destination_folder: gitrepo
+          clean_destination_folder: false
+          is_recursive: false
 
   preview:
     runs-on: ubuntu-latest
