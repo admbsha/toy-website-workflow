@@ -50,9 +50,9 @@ jobs:
       - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
         with:
           connection_string: ${{ secrets.AZURE_BLOB_ID }}
-          container_name: your-container-name
+          container_name: gitrepo
           source_folder: .\src
-          destination_folder: gitrepo
+          destination_folder: gitreptest
           clean_destination_folder: false
           is_recursive: false
 
