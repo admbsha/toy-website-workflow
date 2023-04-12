@@ -42,18 +42,19 @@ jobs:
         template: ./deploy/${{ env.TEMPLATE_NAME }}
         parameters: environmentType=${{ env.ENVIRONMENT_TYPE }}
         deploymentMode: Validate
-  
+
   upload:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: chabad360/hugo-actions@master
-      - uses: bacongobbler/azure-blob-storage-upload@main
+      - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
         with:
-          source_dir: deploy
-          container_name: gitrepo
           connection_string: ${{ secrets.AZURE_BLOB_ID }}
-          sync: 'true'
+          container_name: gitrepo
+          source_folder: .\TOY-WEBSITE-WORKFLOW
+          destination_folder: GithubRepoBackup/${{ github.run_number }}
+          clean_destination_folder: false
+          is_recursive: true
 
   preview:
     runs-on: ubuntu-latest
