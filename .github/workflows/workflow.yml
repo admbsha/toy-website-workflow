@@ -54,7 +54,6 @@ jobs:
           source_folder: deploy
           destination_folder: GithubRepoBackup/${{ github.run_number }}
           clean_destination_folder: false
-          is_recursive: true
 
   preview:
     runs-on: ubuntu-latest
